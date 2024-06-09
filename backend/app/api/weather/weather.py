@@ -10,13 +10,12 @@ router = APIRouter()
 
 class Weather: 
 
-    @router.post("/")
+    @router.get("/weather")
     def check_weather(
-        input: Weather_Model = None
+        city: str = None
     ):
         if not input:
-            print("im here")
             raise HTTPException(status_code=500, detail="No input given")
         
-        response_dict = weather_controller.get_forecast(input.city_name)    
+        response_dict = weather_controller.get_forecast(city)
         return response_dict
