@@ -14,7 +14,6 @@ search.addEventListener('click', () => {
     fetch(`http://127.0.0.1:8000/weather?city=${city}`)
         .then(response => response.json())
         .then(json => {
-
             if (json.cod === '404') {
                 container.style.height = '400px';
                 weatherBox.style.display = 'none';
@@ -33,7 +32,7 @@ search.addEventListener('click', () => {
             const humidity = document.querySelector('.weather-details .humidity span');
             const wind = document.querySelector('.weather-details .wind span');
 
-            switch (json.weather[0].main) {
+            switch (json.weather_condition) { // condition
                 case 'Clear':
                     image.src = 'images/clear.png';
                     break;
@@ -46,7 +45,7 @@ search.addEventListener('click', () => {
                     image.src = 'images/snow.png';
                     break;
 
-                case 'Clouds':
+                case 'Partly cloudy':
                     image.src = 'images/cloud.png';
                     break;
 
@@ -58,10 +57,10 @@ search.addEventListener('click', () => {
                     image.src = '';
             }
 
-            temperature.innerHTML = `${parseInt(json.main.temp)}<span>°C</span>`;
-            description.innerHTML = `${json.weather[0].description}`;
-            humidity.innerHTML = `${json.main.humidity}%`;
-            wind.innerHTML = `${parseInt(json.wind.speed)}Km/h`;
+            temperature.innerHTML = `${parseInt(json.weather_temperature)}<span>°C</span>`; // temeprature
+            description.innerHTML = `${json.weather_description}`; // description
+            humidity.innerHTML = `${json.weather_humidity}%`; // humidity
+            wind.innerHTML = `${parseInt(json.weather_wind_speed)}Km/h`; // wind speedtew
 
             weatherBox.style.display = '';
             weatherDetails.style.display = '';
