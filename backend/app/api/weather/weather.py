@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException
 
-from app.model.weather import Weather as Weather_Model
+from app.model.request.weather import Weather as Weather_Model
+from app.model.response.weather import weatherResponse
 
 from app.controller.weather import WeatherController
 
@@ -13,7 +14,7 @@ class Weather:
     @router.get("/weather")
     def check_weather(
         city: str = None
-    ):
+    ) -> weatherResponse:
         if not input:
             raise HTTPException(status_code=500, detail="No input given")
         
