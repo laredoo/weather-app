@@ -18,7 +18,8 @@ class WeatherController:
             "weather_temperature": weather_dict["temp_c"],
             "weather_description": "weather description test",
             'weather_humidity': weather_dict["humidity"],
-            "weather_wind_speed": weather_dict["wind_kph"]
+            "weather_wind_speed": weather_dict["wind_kph"],
+            "weather_icon": weather_dict["condition"]["icon"],
         }
 
         return weatherResponse(**response_body)

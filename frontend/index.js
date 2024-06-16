@@ -27,35 +27,11 @@ search.addEventListener('click', () => {
             error404.classList.remove('fadeIn');
 
             const image = document.querySelector('.weather-box img');
+            image.src = json.weather_icon
             const temperature = document.querySelector('.weather-box .temperature');
             const description = document.querySelector('.weather-box .description');
             const humidity = document.querySelector('.weather-details .humidity span');
             const wind = document.querySelector('.weather-details .wind span');
-
-            switch (json.weather_condition) { // condition
-                case 'Clear':
-                    image.src = 'images/clear.png';
-                    break;
-
-                case 'Rain':
-                    image.src = 'images/rain.png';
-                    break;
-
-                case 'Snow':
-                    image.src = 'images/snow.png';
-                    break;
-
-                case 'Partly cloudy':
-                    image.src = 'images/cloud.png';
-                    break;
-
-                case 'Haze':
-                    image.src = 'images/mist.png';
-                    break;
-
-                default:
-                    image.src = '';
-            }
 
             temperature.innerHTML = `${parseInt(json.weather_temperature)}<span>°C</span>`; // temeprature
             description.innerHTML = `${json.weather_description}`; // description
