@@ -1,3 +1,3 @@
-from .core.factory import create_api
+from .core.factory import WeatherAPI
 
-api = create_api()
+api = WeatherAPI().create_api()
