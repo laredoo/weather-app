@@ -1,50 +1,74 @@
-const container = document.querySelector('.container');
-const search = document.querySelector('.search-box button');
-const weatherBox = document.querySelector('.weather-box');
-const weatherDetails = document.querySelector('.weather-details');
-const error404 = document.querySelector('.not-found');
+class WeatherApp {
+    constructor() {
+        this.container = document.querySelector('.container');
+        this.searchButton = document.querySelector('.search-box button');
+        this.weatherBox = document.querySelector('.weather-box');
+        this.weatherDetails = document.querySelector('.weather-details');
+        this.error404 = document.querySelector('.not-found');
 
-search.addEventListener('click', () => {
+        this.addEventListeners();
+    }
 
-    const city = document.querySelector('.search-box input').value;
+    addEventListeners() {
+        this.searchButton.addEventListener('click', () => this.fetchWeather());
+    }
 
-    if (city === '')
-        return;
+    async fetchWeather() {
+        const city = document.querySelector('.search-box input').value;
 
-    fetch(`http://127.0.0.1:8000/weather?city=${city}`)
-        .then(response => response.json())
-        .then(json => {
-            if (json.cod === '404') {
-                container.style.height = '400px';
-                weatherBox.style.display = 'none';
-                weatherDetails.style.display = 'none';
-                error404.style.display = 'block';
-                error404.classList.add('fadeIn');
-                return;
-            }
+        if (city === '') return;
 
-            error404.style.display = 'none';
-            error404.classList.remove('fadeIn');
+        try {
+            const response = await fetch(`http://127.0.0.1:8000/weather?city=${city}`);
+            const json = await response.json();
+            this.updateUI(json);
+        } catch (error) {
+            console.error('Error fetching weather data:', error);
+        }
+    }
 
-            const image = document.querySelector('.weather-box img');
-            image.src = json.weather_icon
-            const temperature = document.querySelector('.weather-box .temperature');
-            const description = document.querySelector('.weather-box .description');
-            const humidity = document.querySelector('.weather-details .humidity span');
-            const wind = document.querySelector('.weather-details .wind span');
+    updateUI(data) {
+        if (data.cod === '404') {
+            this.showError();
+            return;
+        }
 
-            temperature.innerHTML = `${parseInt(json.weather_temperature)}<span>°C</span>`; // temeprature
-            description.innerHTML = `${json.weather_description}`; // description
-            humidity.innerHTML = `${json.weather_humidity}%`; // humidity
-            wind.innerHTML = `${parseInt(json.weather_wind_speed)}Km/h`; // wind speedtew
+        this.hideError();
 
-            weatherBox.style.display = '';
-            weatherDetails.style.display = '';
-            weatherBox.classList.add('fadeIn');
-            weatherDetails.classList.add('fadeIn');
-            container.style.height = '590px';
+        const image = document.querySelector('.weather-box img');
+        const temperature = document.querySelector('.weather-box .temperature');
+        const description = document.querySelector('.weather-box .description');
+        const humidity = document.querySelector('.weather-details .humidity span');
+        const wind = document.querySelector('.weather-details .wind span');
 
+        image.src = data.weather_icon;
+        temperature.innerHTML = `${parseInt(data.weather_temperature)}<span>°C</span>`;
+        description.innerHTML = `${data.weather_description}`;
+        humidity.innerHTML = `${data.weather_humidity}%`;
+        wind.innerHTML = `${parseInt(data.weather_wind_speed)}Km/h`;
 
-        });
+        this.weatherBox.style.display = '';
+        this.weatherDetails.style.display = '';
+        this.weatherBox.classList.add('fadeIn');
+        this.weatherDetails.classList.add('fadeIn');
+        this.container.style.height = '590px';
+    }
 
+    showError() {
+        this.container.style.height = '400px';
+        this.weatherBox.style.display = 'none';
+        this.weatherDetails.style.display = 'none';
+        this.error404.style.display = 'block';
+        this.error404.classList.add('fadeIn');
+    }
+
+    hideError() {
+        this.error404.style.display = 'none';
+        this.error404.classList.remove('fadeIn');
+    }
+}
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    new WeatherApp();
 });
