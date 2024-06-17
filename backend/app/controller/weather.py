@@ -17,7 +17,7 @@ class WeatherController:
         response_body = {
             "weather_condition": weather_dict["condition"]["text"],
             "weather_temperature": weather_dict["temp_c"],
-            "weather_description": "weather description test",
+            "weather_description": weather_dict["condition"]["text"],
             "weather_humidity": weather_dict["humidity"],
             "weather_wind_speed": weather_dict["wind_kph"],
             "weather_icon": weather_dict["condition"]["icon"],
